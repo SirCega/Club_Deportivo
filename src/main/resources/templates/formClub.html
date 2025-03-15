@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Formulario Club</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #4caf50, #1d3c31); /* Fondo con gradiente */
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-body {
+            background-color: #ffffff;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .card-footer {
+            background-color: #f1f1f1;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .btn-primary, .btn-secondary {
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-primary i, .btn-secondary i {
+            margin-right: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h3 class="mb-0" th:text="${club.id == null ? 'Agregar Nuevo Club' : 'Editar Club'}"></h3>
+        </div>
+        <div class="card-body">
+			<form action="#" th:action="@{/guardarClub}" th:object="${club}" method="post">
+			                <input type="hidden" th:field="*{id}" />
+
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" th:field="*{nombre}" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="asociacion">Asociación:</label>
+                    <select id="asociacion" name="asociacion" th:field="*{asociacion.id}" class="form-control" required>
+                        <option th:each="asociacion : ${asociaciones}" 
+                                th:value="${asociacion.id}" 
+                                th:text="${asociacion.nombre}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="entrenador">Entrenador:</label>
+                    <select id="entrenador" name="entrenador" th:field="*{entrenador.id}" class="form-control" required>
+                        <option th:each="entrenador : ${entrenadores}" 
+                                th:value="${entrenador.id}" 
+                                th:text="${entrenador.nombre}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="jugadores">Jugadores:</label>
+                    <select multiple id="jugadores" name="jugadores" th:field="*{jugadores}" class="form-control" required>
+                        <option th:each="jugador : ${jugadores}" 
+                                th:value="${jugador.id}" 
+                                th:text="${jugador.nombre}"></option>
+                    </select>
+                </div>
+				<div class="form-group">
+				                    <label for="jugadores">Competiciones:</label>
+									<select multiple id="competiciones" name="competiciones" th:field="*{competiciones}" class="form-control" required>
+									    <option th:each="competicion : ${competiciones}" 
+									            th:value="${competicion.id}" 
+									            th:text="${competicion.nombre}"></option>
+									</select>
+				                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+                <a href="/verClub" class="btn btn-secondary ml-3">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </form>
+        </div>
+        <div class="card-footer text-right">
+            <a href="/verClub" class="btn btn-secondary">
+                <i class="fas fa-home"></i> Volver a la lista
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>

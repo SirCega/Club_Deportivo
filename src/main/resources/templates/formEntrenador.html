@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Formulario de Nuevo Entrenador</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #4caf50, #1d3c31); /* Fondo con gradiente */
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-body {
+            background-color: #ffffff;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .btn-primary, .btn-danger, .btn-secondary {
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-primary i, .btn-danger i, .btn-secondary i {
+            margin-right: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .card-footer {
+            background-color: #f1f1f1;
+            border-radius: 0 0 10px 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h3><i class="fas fa-user-tie"></i> Crear Nuevo Entrenador</h3>
+        </div>
+        <div class="card-body">
+            <form action="#" th:action="@{/guardarEntrenador}" th:object="${entrenador}" method="post">
+                <input type="hidden" th:field="*{id}" />
+
+                
+
+                <div class="form-group">
+                    <label for="nombre"><i class="fas fa-user"></i> Nombre:</label>
+                    <input type="text" class="form-control" id="nombre" th:field="*{nombre}" placeholder="Ingresa el nombre del entrenador" required>
+                    <small th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="form-text text-danger"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="apellido"><i class="fas fa-user"></i> Apellido:</label>
+                    <input type="text" class="form-control" id="apellido" th:field="*{apellido}" placeholder="Ingresa el apellido del entrenador" required>
+                    <small th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}" class="form-text text-danger"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="edad"><i class="fas fa-calendar-alt"></i> Edad:</label>
+                    <input type="number" class="form-control" id="edad" th:field="*{edad}" placeholder="Ingresa la edad del entrenador" required>
+                    <small th:if="${#fields.hasErrors('edad')}" th:errors="*{edad}" class="form-text text-danger"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="nacionalidad"><i class="fas fa-flag"></i> Nacionalidad:</label>
+                    <input type="text" class="form-control" id="nacionalidad" th:field="*{nacionalidad}" placeholder="Ingresa la nacionalidad del entrenador" required>
+                    <small th:if="${#fields.hasErrors('nacionalidad')}" th:errors="*{nacionalidad}" class="form-text text-danger"></small>
+                </div>
+
+                <div class="d-flex">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer text-right">
+            <a href="/verEntrenador" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Volver a la lista
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>

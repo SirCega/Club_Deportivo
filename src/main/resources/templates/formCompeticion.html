@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Competición</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #4caf50, #1d3c31); /* Fondo con gradiente */
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-body {
+            background-color: #ffffff;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f8f9fa;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn-primary, .btn-danger, .btn-secondary, .btn-success {
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-primary i, .btn-danger i, .btn-secondary i, .btn-success i {
+            margin-right: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .card-footer {
+            background-color: #f1f1f1;
+            border-radius: 0 0 10px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+		<div class="card shadow-sm">
+		        <div class="card-header">
+		            <h3><i class="fas fa-building"></i> Crear Nueva Competicion</h3>
+		        </div>
+		        <div class="card-body">
+		            <form action="#" th:action="@{/guardarCompeticion}" th:object="${competicion}" method="post">
+		                <input type="hidden" th:field="*{id}" />
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" th:field="*{nombre}" class="form-control" placeholder="Nombre de la competición" required>
+            </div>
+            <div class="form-group">
+                <label for="montoPremio">Monto Premio</label>
+                <input type="number" id="montoPremio" th:field="*{montoPremio}" class="form-control" placeholder="Monto del premio" required>
+            </div>
+            <div class="form-group">
+                <label for="fechaInicio">Fecha de Inicio</label>
+                <input type="date" id="fechaInicio" th:field="*{fechaInicio}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="fechaFin">Fecha de Fin</label>
+                <input type="date" id="fechaFin" th:field="*{fechaFin}" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <a href="/verCompeticion" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>

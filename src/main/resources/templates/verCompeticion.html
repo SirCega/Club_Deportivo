@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Competiciones</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #4caf50, #1d3c31); /* Fondo con gradiente */
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-body {
+            background-color: #ffffff;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f8f9fa;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn-primary, .btn-danger, .btn-secondary {
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-primary i, .btn-danger i, .btn-secondary i {
+            margin-right: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .card-footer {
+            background-color: #f1f1f1;
+            border-radius: 0 0 10px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Listado de Competiciones</h1>
+        <a href="/verCompeticion/formCompeticion" class="btn btn-primary mb-3">Agregar Competición</a>
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Monto Premio</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="competicion : ${listaCompeticion}">
+                    <td th:text="${competicion.nombre}"></td>
+                    <td th:text="${competicion.montoPremio}"></td>
+                    <td th:text="${competicion.fechaInicio}"></td>
+                    <td th:text="${competicion.fechaFin}"></td>
+                    <td>
+                        <a th:href="@{/competicion/editar/{id}(id=${competicion.id})}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <a th:href="@{/competicion/eliminar/{id}(id=${competicion.id})}" class="btn btn-sm btn-danger"
+                           onclick="return confirm('¿Estás seguro de que deseas eliminar esta competicion?');">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+	<div class="card-footer text-right">
+	            <a th:href="@{/}" class="btn btn-secondary">
+	                <i class="fas fa-home"></i> Volver al Inicio
+	            </a>
+	        </div>
+</body>
+</html>
