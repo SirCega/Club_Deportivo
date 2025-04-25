@@ -1,58 +1,48 @@
 package com.example.Primerproyecto.Controlador;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.example.Primerproyecto.Repositorio.EntrenadorRepository;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+import com.example.Primerproyecto.Servicio.EntrenadorService;
 import com.example.Primerproyecto.entidad.Entrenador;
 
-@Controller
-@RequestMapping
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/api/entrenadores")
 public class EntrenadorController {
 
     @Autowired
-    private EntrenadorRepository entrenadorRepository;
+    private EntrenadorService entrenadorService;
 
-    @GetMapping({"/verEntrenador", "/mostrarEntrenador", "/listarEntrenador"})
-    public String listarEntrenador(Model model) {
-        List<Entrenador> listaEntrenador = entrenadorRepository.findAll();
-        model.addAttribute("listaEntrenador", listaEntrenador);
-        return "verEntrenador";
+    @GetMapping("/list")
+    public List<Entrenador> getEntrenadores() {
+        return entrenadorService.getEntrenadores();
     }
 
-    @GetMapping({"/verEntrenador/formEntrenador"})
-    public String mostrarFormulario(Model model) {
-        model.addAttribute("entrenador", new Entrenador());
-        List<Entrenador> listaEntrenador = entrenadorRepository.findAll();
-        model.addAttribute("listaEntrenador", listaEntrenador);
-        return "formEntrenador";
+    @GetMapping("/list/{id}")
+    public Entrenador getEntrenador(@PathVariable Long id) {
+        return entrenadorService.buscarEntrenador(id);
     }
 
-    @PostMapping({"/guardarEntrenador"})
-    public String guardarEntrenador(Entrenador entrenador) {
-        entrenadorRepository.save(entrenador);
-        return "redirect:/verEntrenador";
+    @PostMapping("/")
+    public Entrenador crearEntrenador(@RequestBody Entrenador entrenador) {
+        return entrenadorService.guardarEntrenador(entrenador);
     }
 
-    @GetMapping("/entrenador/editar/{id}")
-    public String modificarEntrenador(@PathVariable("id") Long id, Model model) {
-        Entrenador entrenador = entrenadorRepository.findById(id).get();
-        model.addAttribute("entrenador", entrenador);
-        List<Entrenador> listaEntrenador = entrenadorRepository.findAll();
-        model.addAttribute("listaEntrenador", listaEntrenador);
-        return "formEntrenador";
+    @PutMapping("/")
+    public Entrenador actualizarEntrenador(@RequestBody Entrenador entrenador) {
+        return entrenadorService.guardarEntrenador(entrenador);
     }
 
-    @GetMapping("/entrenador/eliminar/{id}")
-    public String eliminarEntrenador(@PathVariable("id") Long id, Model model) {
-        entrenadorRepository.deleteById(id);
-        return "redirect:/verEntrenador";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarEntrenador(@PathVariable Long id) {
+        Entrenador entrenador = entrenadorService.buscarEntrenador(id);
+        if (entrenador != null) {
+            entrenadorService.borrarEntrenador(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

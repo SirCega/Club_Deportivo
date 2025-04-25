@@ -1,58 +1,49 @@
 package com.example.Primerproyecto.Controlador;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.example.Primerproyecto.Repositorio.CompeticionRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.example.Primerproyecto.Servicio.CompeticionService;
 import com.example.Primerproyecto.entidad.Competicion;
 
-@Controller
-@RequestMapping
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/api/competiciones")
 public class CompeticionController {
 
     @Autowired
-    private CompeticionRepository competicionRepository;
+    private CompeticionService competicionService;
 
-    @GetMapping({"/verCompeticion", "/mostrarCompeticion", "/listarCompeticion"})
-    public String listarCompeticion(Model model) {
-        List<Competicion> listaCompeticion = competicionRepository.findAll();
-        model.addAttribute("listaCompeticion", listaCompeticion);
-        return "verCompeticion";
+    @GetMapping("/list")
+    public List<Competicion> cargarCompeticiones() {
+        return competicionService.getCompeticiones();
     }
 
-    @GetMapping({"/verCompeticion/formCompeticion"})
-    public String mostrarFormulario(Model model) {
-        model.addAttribute("competicion", new Competicion());
-        List<Competicion> listaCompeticion = competicionRepository.findAll();
-        model.addAttribute("listaCompeticion", listaCompeticion);
-        return "formCompeticion";
+    @GetMapping("/list/{id}")
+    public Competicion buscarPorId(@PathVariable Long id) {
+        return competicionService.buscarCompeticion(id);
     }
 
-    @PostMapping({"/guardarCompeticion"})
-    public String guardarCompeticion(Competicion competicion) {
-        competicionRepository.save(competicion);
-        return "redirect:/verCompeticion";
+    @PostMapping("/")
+    public Competicion agregar(@RequestBody Competicion competicion) {
+        return competicionService.nuevaCompeticion(competicion);
     }
 
-    @GetMapping("/competicion/editar/{id}")
-    public String modificarCompeticion(@PathVariable("id") Long id, Model model) {
-        Competicion competicion = competicionRepository.findById(id).get();
-        model.addAttribute("competicion", competicion);
-        List<Competicion> listaCompeticion = competicionRepository.findAll();
-        model.addAttribute("listaCompeticion", listaCompeticion);
-        return "formCompeticion";
+    @PutMapping("/")
+    public Competicion actualizar(@RequestBody Competicion competicion) {
+        return competicionService.nuevaCompeticion(competicion);
     }
 
-    @GetMapping("/competicion/eliminar/{id}")
-    public String eliminarCompeticion(@PathVariable("id") Long id, Model model) {
-        competicionRepository.deleteById(id);
-        return "redirect:/verCompeticion";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Competicion> eliminar(@PathVariable Long id) {
+        Competicion obj = competicionService.buscarCompeticion(id);
+        if (obj != null) {
+            competicionService.borrarCompeticion(id);
+            return new ResponseEntity<>(obj, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

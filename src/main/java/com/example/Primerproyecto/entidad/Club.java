@@ -1,16 +1,6 @@
 package com.example.Primerproyecto.entidad;
 
-import java.util.List;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "clubes")
@@ -19,28 +9,22 @@ public class Club {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String nombre;
 
-    @OneToOne
-    private Entrenador entrenador;
+    @Column(name = "asociacion_id")
+    private Long asociacionId;
 
-    @OneToMany
-    @JoinColumn(name = "id_club")
-    private List<Jugador> jugadores;
+    @Column(name = "entrenador_id")
+    private Long entrenadorId;
 
-    @ManyToOne
-    private Asociacion asociacion;
-
-    @ManyToMany
-    private List<Competicion> competiciones;
-
-    public Asociacion getAsociacion() {
-        return asociacion;
+    // Getters y Setters
+    public Long getId() {
+        return id;
     }
 
-    public void setAsociacion(Asociacion asociacion) {
-        this.asociacion = asociacion;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -51,35 +35,19 @@ public class Club {
         this.nombre = nombre;
     }
 
-    public Long getId() {
-        return id;
+    public Long getAsociacionId() {
+        return asociacionId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAsociacionId(Long asociacionId) {
+        this.asociacionId = asociacionId;
     }
 
-    public Entrenador getEntrenador() {
-        return entrenador;
+    public Long getEntrenadorId() {
+        return entrenadorId;
     }
 
-    public void setEntrenador(Entrenador entrenador) {
-        this.entrenador = entrenador;
-    }
-
-    public List<Jugador> getJugadores() {
-        return jugadores;
-    }
-
-    public void setJugadores(List<Jugador> jugadores) {
-        this.jugadores = jugadores;
-    }
-
-    public List<Competicion> getCompeticiones() {
-        return competiciones;
-    }
-
-    public void setCompeticiones(List<Competicion> competiciones) {
-        this.competiciones = competiciones;
+    public void setEntrenadorId(Long entrenadorId) {
+        this.entrenadorId = entrenadorId;
     }
 }

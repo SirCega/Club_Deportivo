@@ -1,103 +1,48 @@
 package com.example.Primerproyecto.Controlador;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.example.Primerproyecto.Repositorio.ClubRepository;
-import com.example.Primerproyecto.Repositorio.EntrenadorRepository;
-import com.example.Primerproyecto.Repositorio.AsociacionRepository;
-import com.example.Primerproyecto.Repositorio.CompeticionRepository;
-import com.example.Primerproyecto.Repositorio.JugadorRepository;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+import com.example.Primerproyecto.Servicio.ClubService;
 import com.example.Primerproyecto.entidad.Club;
-import com.example.Primerproyecto.entidad.Entrenador;
-import com.example.Primerproyecto.entidad.Asociacion;
-import com.example.Primerproyecto.entidad.Competicion;
-import com.example.Primerproyecto.entidad.Jugador;
 
-@Controller
-@RequestMapping
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/api/clubes")
 public class ClubController {
 
     @Autowired
-    private ClubRepository clubRepository;
+    private ClubService clubService;
 
-    @Autowired
-    private EntrenadorRepository entrenadorRepository;
-
-    @Autowired
-    private AsociacionRepository asociacionRepository;
-
-    @Autowired
-    private CompeticionRepository competicionRepository;
-
-    @Autowired
-    private JugadorRepository jugadorRepository;
-
-   
-    @GetMapping({"/verClub", "/mostrarClub", "/listarClub"})
-    public String listarClub(Model model) {
-        List<Club> listaClub = clubRepository.findAll();
-        model.addAttribute("listaClub", listaClub);
-        return "verClub"; 
-    }
-    
-    @GetMapping({"/verClub/formClub"})
-    public String mostrarFormulario(Model model) {
-        model.addAttribute("club", new Club());
-        
-        
-        List<Entrenador> entrenadores = entrenadorRepository.findAll();
-        List<Asociacion> asociaciones = asociacionRepository.findAll();
-        List<Competicion> competiciones = competicionRepository.findAll();
-        List<Jugador> jugadores = jugadorRepository.findAll();
-
-       
-        model.addAttribute("entrenadores", entrenadores);
-        model.addAttribute("asociaciones", asociaciones);
-        model.addAttribute("competiciones", competiciones);
-        model.addAttribute("jugadores", jugadores);
-        
-        return "formClub"; 
+    @GetMapping("/list")
+    public List<Club> getClubes() {
+        return clubService.getClubes();
     }
 
-    
-    @PostMapping({"/guardarClub"})
-    public String guardarClub(Club club) {
-        clubRepository.save(club);
-        return "redirect:/verClub"; 
+    @GetMapping("/list/{id}")
+    public Club getClub(@PathVariable Long id) {
+        return clubService.buscarClub(id);
     }
 
-    
-    @GetMapping("/club/editar/{id}")
-    public String modificarClub(@PathVariable("id") Long id, Model model) {
-        Club club = clubRepository.findById(id).get();
-        model.addAttribute("club", club);
-        
-        
-        List<Entrenador> entrenadores = entrenadorRepository.findAll();
-        List<Asociacion> asociaciones = asociacionRepository.findAll();
-        List<Competicion> competiciones = competicionRepository.findAll();
-        List<Jugador> jugadores = jugadorRepository.findAll();
-
-        model.addAttribute("entrenadores", entrenadores);
-        model.addAttribute("asociaciones", asociaciones);
-        model.addAttribute("competiciones", competiciones);
-        model.addAttribute("jugadores", jugadores);
-        
-        return "formClub"; 
+    @PostMapping("/")
+    public Club crearClub(@RequestBody Club club) {
+        return clubService.guardarClub(club);
     }
 
-    
-    @GetMapping("/club/eliminar/{id}")
-    public String eliminarClub(@PathVariable("id") Long id) {
-        clubRepository.deleteById(id);
-        return "redirect:/verClub"; 
+    @PutMapping("/")
+    public Club actualizarClub(@RequestBody Club club) {
+        return clubService.guardarClub(club);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarClub(@PathVariable Long id) {
+        Club club = clubService.buscarClub(id);
+        if (club != null) {
+            clubService.borrarClub(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

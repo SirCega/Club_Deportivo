@@ -1,61 +1,49 @@
 package com.example.Primerproyecto.Controlador;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import com.example.Primerproyecto.Repositorio.ClubRepository;
-import com.example.Primerproyecto.Repositorio.JugadorRepository;
-import com.example.Primerproyecto.entidad.Club;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.example.Primerproyecto.Servicio.JugadorService;
 import com.example.Primerproyecto.entidad.Jugador;
 
-@Controller
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/api/jugadores")
 public class JugadorController {
 
     @Autowired
-    private JugadorRepository jugadorRepository;
+    private JugadorService jugadorService;
 
-    @Autowired
-    private ClubRepository clubRepository;
-
-    @GetMapping("/verJugador")
-    public String listarJugadores(Model model) {
-        List<Jugador> listaJugador = jugadorRepository.findAll();
-        model.addAttribute("listaJugador", listaJugador);
-        return "verJugador";
+    @GetMapping("/list")
+    public List<Jugador> cargarJugadores() {
+        return jugadorService.getJugadores();
     }
 
-    @GetMapping("/verJugador/formJugador")
-    public String mostrarFormulario(Model model) {
-        model.addAttribute("jugador", new Jugador());
-        List<Club> listaClub = clubRepository.findAll();
-        model.addAttribute("listaClub", listaClub); 
-        return "formJugador";
+    @GetMapping("/list/{id}")
+    public Jugador buscarPorId(@PathVariable Long id) {
+        return jugadorService.buscarJugador(id);
     }
 
-    @PostMapping("/guardarJugador")
-    public String guardarJugador(Jugador jugador) {
-        jugadorRepository.save(jugador);
-        return "redirect:/verJugador";
+    @PostMapping("/")
+    public Jugador agregar(@RequestBody Jugador jugador) {
+        return jugadorService.nuevoJugador(jugador);
     }
 
-    @GetMapping("/jugador/editar/{id}")
-    public String modificarJugador(@PathVariable("id") Long id, Model model) {
-        Jugador jugador = jugadorRepository.findById(id).get();
-        model.addAttribute("jugador", jugador);
-        List<Club> listaClub = clubRepository.findAll();
-        model.addAttribute("listaClub", listaClub); 
-        return "formJugador";
+    @PutMapping("/")
+    public Jugador actualizar(@RequestBody Jugador jugador) {
+        return jugadorService.nuevoJugador(jugador);
     }
 
-    @GetMapping("/jugador/eliminar/{id}")
-    public String eliminarJugador(@PathVariable("id") Long id) {
-        jugadorRepository.deleteById(id);
-        return "redirect:/verJugador";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Jugador> eliminar(@PathVariable Long id) {
+        Jugador obj = jugadorService.buscarJugador(id);
+        if (obj != null) {
+            jugadorService.borrarJugador(id);
+            return new ResponseEntity<>(obj, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

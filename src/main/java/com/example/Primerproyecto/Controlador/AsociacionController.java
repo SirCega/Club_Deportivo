@@ -9,44 +9,46 @@ import org.springframework.web.bind.annotation.*;
 import com.example.Primerproyecto.Servicio.AsociacionService;
 import com.example.Primerproyecto.entidad.Asociacion;
 
+
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/asociaciones")
 public class AsociacionController {
 
     @Autowired
     private AsociacionService asociacionService;
 
-    @GetMapping
-    public ResponseEntity<List<Asociacion>> findAll() {
-        return ResponseEntity.ok(asociacionService.findAll());
+    @GetMapping("/list")
+    public List<Asociacion> cargarAsociaciones() {
+        return asociacionService.getAsociaciones();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Asociacion> findById(@PathVariable Long id) {
-        return asociacionService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/list/{id}")
+    public Asociacion buscarPorId(@PathVariable Long id) {
+        return asociacionService.buscarAsociacion(id);
+                
     }
 
-    @PostMapping
-    public ResponseEntity<Asociacion> create(@RequestBody Asociacion asociacion) {
-        return new ResponseEntity<>(asociacionService.create(asociacion), HttpStatus.CREATED);
+    @PostMapping("/")
+    public Asociacion agregar(@RequestBody Asociacion asociacion) {
+        return  asociacionService.nuevoAsociacion(asociacion);
     }
 
-    @PutMapping
-    public ResponseEntity<Asociacion> update(@RequestBody Asociacion asociacion) {
-        return asociacionService.findById(asociacion.getId())
-                .map(existing -> ResponseEntity.ok(asociacionService.update(asociacion)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    @PutMapping("/")
+    public Asociacion actualizar(@RequestBody Asociacion asociacion) {
+        return asociacionService.nuevoAsociacion(asociacion);
+                
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        return asociacionService.findById(id)
-                .map(existing -> {
-                    asociacionService.delete(id);
-                    return ResponseEntity.ok().<Void>build();
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Asociacion> eliminar(@PathVariable Long id) {
+    	Asociacion obj = asociacionService.buscarAsociacion(id);
+    	if(obj != null) {
+        	asociacionService.borrarAsociacion(id);
+    	}else {
+    		return new ResponseEntity<>(obj, HttpStatus.INTERNAL_SERVER_ERROR);
+    	}
+		return new ResponseEntity<>(obj,HttpStatus.OK);
     }
-}
+    }
+
